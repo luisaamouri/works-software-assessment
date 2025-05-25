@@ -1,16 +1,14 @@
-import { timeStamp } from "console";
-
 const mongoose = require("mongoose");
 
 const NoteSchema = mongoose.Schema(
   {
     title: {
       type: String,
-      require: [true, "Please title your note."],
+      required: [true, "Please title your note."],
     },
     body: {
       type: String,
-      require: false,
+      required: false,
     },
     image: {
       type: String,

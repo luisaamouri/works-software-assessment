@@ -15,12 +15,12 @@ router.get("/", getNotes);
 router.get("/:id", getSingleNote);
 
 // create note
-router.get("/", createNote);
+router.post("/", createNote);
 
 // delete note by ID
-router.get("/:id", deleteNote);
+router.put("/:id", deleteNote);
 
 // update note by ID
-router.get("/:id", updateNote);
+router.delete("/:id", updateNote);
 
 export default router;

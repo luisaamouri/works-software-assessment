@@ -19,7 +19,7 @@ mongoose
     "mongodb+srv://admin:adminDB@assessmentdb.foqd4ql.mongodb.net/Node-API?retryWrites=true&w=majority&appName=assessmentDB"
   )
   .then(() => {
-    console.log("Connnedted to assessmentDB");
+    console.log("Connnected to assessmentDB");
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });

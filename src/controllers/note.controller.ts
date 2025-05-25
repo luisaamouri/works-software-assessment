@@ -1,5 +1,6 @@
 import Note from "../models/note.model";
 import { Request, Response } from "express";
+import mongoose from "mongoose";
 
 // get all notes
 const getNotes = async (req: Request, res: Response) => {
@@ -13,14 +14,23 @@ const getNotes = async (req: Request, res: Response) => {
 
 // get note by ID
 const getSingleNote = async (req: Request, res: Response) => {
-  try {
     const { id } = req.params;
-    const note = await Note.findById(id);
-    res.status(200).json(note);
-  } catch (e: any) {
-    res.status(500).json({ message: e.message });
-  }
-};
+
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid ID format' });
+    }
+  
+    try {
+      const note = await Note.findById(id);
+      if (!note) {
+        return res.status(404).json({ message: 'Note not found' });
+      }
+      res.status(200).json(note);
+    } catch (e: any) {
+      res.status(500).json({ message: e.message });
+    }
+  };
 
 // update note by ID
 const updateNote = async (req: Request, res: Response) => {
@@ -35,6 +45,9 @@ const updateNote = async (req: Request, res: Response) => {
     const updatedNote = await Note.findById(id);
     res.status(200).json(note);
   } catch (e: any) {
+    if (e.name === 'CastError') {
+        return res.status(400).json({ message: 'Invalid ID format' });
+      }
     res.status(500).json({ message: e.message });
   }
 };
@@ -48,8 +61,12 @@ const deleteNote = async (req: Request, res: Response) => {
     if (!note) {
       return res.status(404).json({ message: "Note not found" });
     }
+
     res.status(200).json({ message: "Note successfully deleted" });
   } catch (e: any) {
+    if (e.name === 'CastError') {
+        return res.status(400).json({ message: 'Invalid ID format' });
+      }
     res.status(500).json({ message: e.message });
   }
 };
@@ -60,7 +77,7 @@ const createNote = async (req: Request, res: Response) => {
     const note = await Note.create(req.body);
     res.status(200).json(note);
   } catch (e: any) {
-    res.status(500).json({ message: e.message });
+    res.status(400).json({ message: e.message });
   }
 };
 
